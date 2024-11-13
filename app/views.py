@@ -2,6 +2,7 @@
 
 from django.shortcuts import redirect, render
 from .layers.services import services
+from .layers.utilities import translator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 
@@ -42,7 +43,8 @@ def getAllFavouritesByUser(request):
 
 @login_required
 def saveFavourite(request):
-    pass
+    services.saveFavourite(request)
+    return home(request)
 
 @login_required
 def deleteFavourite(request):
