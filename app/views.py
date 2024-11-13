@@ -5,17 +5,20 @@ from .layers.services import services
 from .layers.utilities import translator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
+from django.core.paginator import Paginator
 
 def index_page(request):
     return render(request, 'index.html')
 
 # esta función obtiene 2 listados que corresponden a las imágenes de la API y los favoritos del usuario, y los usa para dibujar el correspondiente template.
 # si el opcional de favoritos no está desarrollado, devuelve un listado vacío.
-def home(request):
+def home(request, page=1):
     images = services.getAllImages()
     favourite_list = services.getAllFavourites(request)
+    image_paginator = Paginator(images, per_page=6)
+    image_page = image_paginator.get_page(page)
+    return render(request, 'home.html', { 'images': image_page, 'favourite_list': favourite_list })
 
-    return render(request, 'home.html', { 'images': images, 'favourite_list': favourite_list })
 
 def search(request):
     search_msg = request.POST.get('query', '')
@@ -43,7 +46,8 @@ def saveFavourite(request):
 
 @login_required
 def deleteFavourite(request):
-    pass
+    services.deleteFavourite(request)
+    return getAllFavouritesByUser(request)
 
 @login_required
 def exit(request):
