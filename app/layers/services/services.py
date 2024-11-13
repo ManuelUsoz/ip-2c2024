@@ -10,9 +10,11 @@ def getAllImages(input=None):
     json_collection = transport.getAllImages()
     
     # recorre cada dato crudo de la colección anterior, lo convierte en una Card y lo agrega a images.
-    images = []
-    for object in json_collection:
-        images.append(translator.fromRequestIntoCard(object))
+    images = [
+        translator.fromRequestIntoCard(obj) 
+        for obj in json_collection 
+        if input is None or input in obj['name']
+    ]
 
     return images
 
@@ -29,11 +31,11 @@ def getAllFavourites(request):
     else:
         user = get_user(request)
 
-        favourite_list = [] # buscamos desde el repositories.py TODOS los favoritos del usuario (variable 'user').
+        favourite_list = repositories.getAllFavourites(user) # buscamos desde el repositories.py TODOS los favoritos del usuario (variable 'user').
         mapped_favourites = []
 
         for favourite in favourite_list:
-            card = '' # transformamos cada favorito en una Card, y lo almacenamos en card.
+            card = translator.fromRepositoryIntoCard(favourite) # transformamos cada favorito en una Card, y lo almacenamos en card.
             mapped_favourites.append(card)
 
         return mapped_favourites

@@ -13,22 +13,17 @@ def index_page(request):
 # si el opcional de favoritos no está desarrollado, devuelve un listado vacío.
 def home(request):
     images = services.getAllImages()
-    favourite_list = []
+    favourite_list = services.getAllFavourites(request)
 
     return render(request, 'home.html', { 'images': images, 'favourite_list': favourite_list })
 
 def search(request):
     search_msg = request.POST.get('query', '')
-    print(search_msg)
-    # si el texto ingresado no es vacío, trae las imágenes y favoritos desde services.py,
-    # y luego renderiza el template (similar a home).
     images = [];
     favourite_list = []
     if (search_msg != ''):
-        resp = services.getAllImages();
-        for item in resp:
-            if search_msg in item.name:
-                images.append(item)
+        images = services.getAllImages(search_msg);
+        favourite_list = services.getAllFavourites(request)
         
         return render(request, 'home.html', { 'images': images, 'favourite_list': favourite_list })
     else:
@@ -38,7 +33,7 @@ def search(request):
 # Estas funciones se usan cuando el usuario está logueado en la aplicación.
 @login_required
 def getAllFavouritesByUser(request):
-    favourite_list = []
+    favourite_list = services.getAllFavourites(request)
     return render(request, 'favourites.html', { 'favourite_list': favourite_list })
 
 @login_required
