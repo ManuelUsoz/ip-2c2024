@@ -20,15 +20,17 @@ def home(request, page=1):
     return render(request, 'home.html', { 'images': image_page, 'favourite_list': favourite_list })
 
 
-def search(request):
+def search(request, page=1):
     search_msg = request.POST.get('query', '')
     images = [];
     favourite_list = []
     if (search_msg != ''):
         images = services.getAllImages(search_msg);
+        image_paginator = Paginator(images, per_page=6)
+        image_page = image_paginator.get_page(page)
         favourite_list = services.getAllFavourites(request)
         
-        return render(request, 'home.html', { 'images': images, 'favourite_list': favourite_list })
+        return render(request, 'home.html', { 'images': image_page, 'favourite_list': favourite_list })
     else:
         return redirect('home')
 
