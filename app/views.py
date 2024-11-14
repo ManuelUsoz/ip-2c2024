@@ -20,7 +20,6 @@ def register(request):
         password = request.POST['password']
         email = request.POST['email']
 
-        # Verificar si el usuario ya existe
         if User.objects.filter(username=username).exists():
             return render(request, 'registration/user-enrollment.html', {
                 'error_message': 'El nombre de usuario ya está en uso. Por favor, elija otro.'
@@ -34,7 +33,6 @@ def register(request):
             last_name=last_name
         )
 
-        # Enviar correo de confirmación
         send_mail(
             'Bienvenido a nuestra aplicación',
             f'Sus credenciales de acceso:\nUsuario: {username}\nContraseña: {password}',
