@@ -52,10 +52,8 @@
                                     {% endif %}
                                 </strong>
                             </p>
-                            <p class="card-text"><small class="text-body-secondary">Última ubicación: {{
-                                    img.last_location }}</small></p>
-                            <p class="card-text"><small class="text-body-secondary">Episodio inicial: {{ img.first_seen
-                                    }}</small></p>
+                            <p class="card-text"><small class="text-body-secondary">Última ubicación: {{img.last_location}}</small></p>
+                            <p class="card-text"><small class="text-body-secondary">Episodio inicial: {{ img.first_seen}}</small></p>
                         </div>
                         {% if request.user.is_authenticated %}
                         <div class="card-footer text-center">
